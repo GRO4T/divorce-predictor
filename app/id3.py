@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from numpy import log2 as log
+import pdb
 
 
 eps = np.finfo(float).eps
@@ -89,8 +90,9 @@ def test(tree, df):
 
 def find_closest_value(a_list, given_value):
     absolute_difference_function = lambda list_value : abs(list_value - given_value)
-    return min(a_list, key=absolute_difference_function)
-
+    if (type(given_value) is not str):
+        return min(a_list, key=absolute_difference_function)
+    return a_list[0]
 
 def getClass(tree, row):
     attr = list(tree.keys())[0]

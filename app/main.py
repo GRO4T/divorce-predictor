@@ -3,11 +3,11 @@ import data_set as ds
 from pprint import pprint
 import pdb
 
-NUM_RUNS = 10
-DIVORCE_DATA_SET = "data/divorce.csv"
+NUM_RUNS = 1
+DIVORCE_DATA_SET = "data/students/student-mat.csv"
 TEST_SIZE = 0.2
 
-ds.load_dataset(path=DIVORCE_DATA_SET, test_size=TEST_SIZE)
+ds.load_dataset(path=DIVORCE_DATA_SET, test_size=TEST_SIZE, a_class="Walc")
 sum_acc = 0
 min_acc = 1.0
 max_acc =  0
@@ -16,8 +16,7 @@ for i in range(NUM_RUNS):
     ds.resplit_dataset(test_size=TEST_SIZE)
     id3_tree = id3.buildTree(ds.train_set)
     print(f"run {i}")
-    #print("ID3 tree")
-    #pprint(id3_tree)
+    pprint(id3_tree)
     acc = id3.test(id3_tree, ds.test_set)
     if (acc > max_acc):
         max_acc = acc

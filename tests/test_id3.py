@@ -1,18 +1,18 @@
 from app import data_set as ds
 from app import id3
+from pprint import pprint
 
 datasets = {
     "data/divorce.csv" : {"class": "Class"},
     "data/students/student-mat.csv" : {"class": "Walc"},
     "data/students/student-por.csv" : {"class": "Walc"}
 }
-test_size = 0.2
+test_size = 0.05
 test_runs = 5
 
 def test_id3():
     for path in datasets.keys():
         a_class = datasets[path]["class"]
-        print(a_class)
         ds.load_dataset(path=path, test_size=test_size, a_class=a_class)
         sum_acc = 0
         min_acc = 1.0
@@ -22,8 +22,7 @@ def test_id3():
             ds.resplit_dataset(test_size=test_size)
             id3_tree = id3.buildTree(ds.train_set)
             print(f"run {i}")
-            #print("ID3 tree")
-            #pprint(id3_tree)
+            print(id3_tree)
             acc = id3.test(id3_tree, ds.test_set)
             if (acc > max_acc):
                 max_acc = acc

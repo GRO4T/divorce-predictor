@@ -12,8 +12,6 @@ def load_dataset(*, path, test_size=0.2, a_class="Class"):
     df = pd.read_csv(path, sep=";")
     df1 = df.pop(a_class)
     df[a_class] = df1
-    print(df)
-    print(df.columns.get_loc(a_class))
     train_set, test_set = train_test_split(df, test_size=test_size)
 
 def resplit_dataset(*, test_size=0.2):
