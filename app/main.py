@@ -22,7 +22,8 @@ for i in range(NUM_RUNS):
     ds.resplit_dataset(test_size=TEST_SIZE)
     id3_tree = id3.build_tree(train_set=ds.train_set, original_data_set=ds.data_set)
     print(f"run {i}")
-    # pprint(id3_tree)
+    print(ds.train_set)
+    pprint(id3_tree)
     acc, mse, me = id3.test(id3_tree, ds.test_set)
     if acc > max_acc:
         max_acc = acc

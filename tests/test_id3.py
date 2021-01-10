@@ -5,7 +5,8 @@ from pprint import pprint
 DATA_SETS = {
     "data/divorce.csv": {"class": "Class"},
     "data/students/student-mat.csv": {"class": "Dalc"},
-    "data/students/student-por.csv": {"class": "Dalc"}
+    "data/students/student-por.csv": {"class": "Dalc"},
+    "data/mushrooms/agaricus-lepiota.csv": {"class": "class"}
 }
 TEST_SIZE = 0.2
 TEST_RUNS = 5
