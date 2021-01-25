@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 from numpy import log2 as log
 import pdb
+from pprint import pprint
+import copy
 
 eps = np.finfo(float).eps
 
@@ -40,8 +42,8 @@ def find_winner(df):
     return df.keys()[:-1][np.argmax(inf_gain)]
 
 
-def get_subtable(df, node, value):
-    return df[df[node] == value].reset_index(drop=True)
+def get_subtable(df, attr, attr_value):
+    return df[df[attr] == attr_value].reset_index(drop=True)
 
 
 def get_att_values(df):
@@ -53,12 +55,12 @@ def get_att_values(df):
     return att_values
 
 
-def build_tree(*, train_set, original_data_set):
+def build_id3(*, train_set, original_data_set):
     att_values = get_att_values(original_data_set)
-    return __build_tree(train_set, att_values)
+    return __build_id3(train_set, att_values)
 
 
-def __build_tree(df, att_values, tree=None):
+def __build_id3(df, att_values, tree=None):
     class_name = df.keys()[-1]
     # Get attribute with maximum information gain
     node = find_winner(df)
@@ -84,8 +86,27 @@ def __build_tree(df, att_values, tree=None):
         if len(counts) == 1:  # Checking purity of subset
             tree[node][value] = class_values[0]
         else:
-            tree[node][value] = __build_tree(subtable, att_values)  # Calling the function recursively
+            tree[node][value] = __build_id3(subtable, att_values)  # Calling the function recursively
 
+    return tree
+
+
+def build_c45(df, sub_df, tree):
+    class_name = df.keys()[-1]
+    if type(tree) is not dict:  # leaf
+        return tree
+    attr = list(tree.keys())[0]
+    for attr_value in range(5):
+        subtable = get_subtable(sub_df, attr, attr_value)
+        tree[attr][attr_value] = build_c45(df, subtable, tree[attr][attr_value])
+        # evaluate
+        most_freq_class = sub_df[class_name].value_counts().idxmax()
+        acc, mse, me = test(tree, df)
+        p_tree = copy.deepcopy(tree)  # p for "pruning"
+        p_tree[attr] = most_freq_class
+        p_acc, p_mse, p_me = test(p_tree, df)
+        if p_acc >= acc:
+            return most_freq_class
     return tree
 
 
@@ -109,7 +130,11 @@ def test(tree, df):
 
 def get_class(tree, row):
     attr = list(tree.keys())[0]
-    subtree = tree[attr][row[attr]]
+    try:
+        subtree = tree[attr][row[attr]]
+    except IndexError:
+        return tree[attr]
+
     while type(subtree) is dict:
         attr = list(subtree.keys())[0]
         subtree = subtree[attr][row[attr]]

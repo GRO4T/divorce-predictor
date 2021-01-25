@@ -24,7 +24,7 @@ def test_id3():
         sum_rel_acc = 0
         for i in range(TEST_RUNS):
             ds.resplit_dataset(test_size=TEST_SIZE)
-            id3_tree = id3.build_tree(train_set=ds.train_set, original_data_set=ds.data_set)
+            id3_tree = id3.build_id3(train_set=ds.train_set, original_data_set=ds.data_set)
             print(f"run {i}")
             # print(id3_tree)
             acc, mse, me = id3.test(id3_tree, ds.test_set)
