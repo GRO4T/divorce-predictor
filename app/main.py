@@ -3,11 +3,11 @@ import data_set as ds
 from pprint import pprint
 import pdb
 
-NUM_RUNS = 4
-DIVORCE_DATA_SET = "data/students/student-mat.csv"
-CLASS = "Dalc"
-# DIVORCE_DATA_SET = "data/divorce.csv"
-# CLASS = "Class"
+NUM_RUNS = 1
+#DIVORCE_DATA_SET = "data/students/student-mat.csv"
+#CLASS = "Dalc"
+DIVORCE_DATA_SET = "data/divorce.csv"
+CLASS = "Class"
 TEST_SIZE = 0.2
 PRUNE_SIZE = 0.2
 
@@ -16,7 +16,7 @@ class_range = len(id3.get_att_values(ds.data_set)[CLASS])
 
 
 def test(test_set, tree):
-    acc, mse, me = id3.test(id3_tree, ds.test_set)
+    acc, mse, me = id3.test(tree, ds.test_set)
     rel_acc = 1 - me / class_range
     print(f"correctly classified: {acc}")
     print(f"mean squared error: {mse}")
@@ -31,14 +31,6 @@ if __name__ == "__main__":
         id3_tree = id3.build_id3(ds.train_set, ds.data_set)
         # pprint(id3_tree)
         c45_tree = id3.build_c45(ds.prune_set, ds.data_set, id3_tree, ds.train_set)
-        print("****************************************************************")
-        print("****************************************************************")
-        print("****************************************************************")
-        print(c45_tree)
-        print("****************************************************************")
-        print("----------------------------------------------------------------")
-        print("****************************************************************")
-        pprint(id3_tree)
         print(f"run {i}")
         print("ID3")
         test(ds.test_set, id3_tree)

@@ -114,9 +114,7 @@ def __build_c45(df, sub_df, tree, att_values):
         p_tree = copy.deepcopy(tree)  # p for "pruning"
         p_tree[attr] = most_freq_class
         p_acc, p_mse, p_me = test(p_tree, df)
-        print(p_acc, acc)
         if p_acc >= acc:
-            print("FUCK OFF")
             return most_freq_class
     return tree
 
@@ -140,12 +138,13 @@ def test(tree, df):
 
 
 def get_class(tree, row):
+    if (type(tree)) is not dict:
+        return tree
     attr = list(tree.keys())[0]
     subtree = None
     try:
         subtree = tree[attr][row[attr]]
     except IndexError:
-        print(tree)
         return tree[attr]
 
     while type(subtree) is dict:
