@@ -55,7 +55,7 @@ def get_att_values(df):
     return att_values
 
 
-def build_id3(*, train_set, original_data_set):
+def build_id3(train_set, original_data_set):
     att_values = get_att_values(original_data_set)
     return __build_id3(train_set, att_values)
 
@@ -91,21 +91,32 @@ def __build_id3(df, att_values, tree=None):
     return tree
 
 
-def build_c45(df, sub_df, tree):
+def build_c45(prune_set, original_data_set, id3_tree, xd):
+    # pruned_tree = copy.deepcopy(id3_tree())
+    pruned_tree = build_id3(xd, original_data_set)
+    att_values = get_att_values(original_data_set)
+    return __build_c45(prune_set, prune_set, pruned_tree, att_values)
+
+
+def __build_c45(df, sub_df, tree, att_values):
     class_name = df.keys()[-1]
     if type(tree) is not dict:  # leaf
         return tree
     attr = list(tree.keys())[0]
-    for attr_value in range(5):
+    for attr_value in att_values[attr]:
         subtable = get_subtable(sub_df, attr, attr_value)
-        tree[attr][attr_value] = build_c45(df, subtable, tree[attr][attr_value])
+        tree[attr][attr_value] = __build_c45(df, subtable, tree[attr][attr_value], att_values)
         # evaluate
+        if sub_df[class_name].empty:
+            return tree
         most_freq_class = sub_df[class_name].value_counts().idxmax()
         acc, mse, me = test(tree, df)
         p_tree = copy.deepcopy(tree)  # p for "pruning"
         p_tree[attr] = most_freq_class
         p_acc, p_mse, p_me = test(p_tree, df)
+        print(p_acc, acc)
         if p_acc >= acc:
+            print("FUCK OFF")
             return most_freq_class
     return tree
 
@@ -130,9 +141,11 @@ def test(tree, df):
 
 def get_class(tree, row):
     attr = list(tree.keys())[0]
+    subtree = None
     try:
         subtree = tree[attr][row[attr]]
     except IndexError:
+        print(tree)
         return tree[attr]
 
     while type(subtree) is dict:
