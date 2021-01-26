@@ -1,22 +1,19 @@
-import id3
-import data_set as ds
+import id3 as id3
+from data_set import DataSet
 from pprint import pprint
 import pdb
 
-NUM_RUNS = 1
-#DIVORCE_DATA_SET = "data/students/student-mat.csv"
-#CLASS = "Dalc"
-DIVORCE_DATA_SET = "data/divorce.csv"
-CLASS = "Class"
+NUM_RUNS = 4
+DIVORCE_DATA_SET = "data/students/student-mat.csv"
+CLASS = "Dalc"
+# DIVORCE_DATA_SET = "data/divorce.csv"
+# CLASS = "Class"
 TEST_SIZE = 0.2
 PRUNE_SIZE = 0.2
 
-ds.load_dataset(path=DIVORCE_DATA_SET, test_size=TEST_SIZE, prune_size=PRUNE_SIZE, class_name=CLASS)
-class_range = len(id3.get_att_values(ds.data_set)[CLASS])
-
 
 def test(test_set, tree):
-    acc, mse, me = id3.test(tree, ds.test_set)
+    acc, mse, me = id3.test(tree, test_set)
     rel_acc = 1 - me / class_range
     print(f"correctly classified: {acc}")
     print(f"mean squared error: {mse}")
@@ -25,14 +22,16 @@ def test(test_set, tree):
 
 
 if __name__ == "__main__":
+    data = DataSet(DIVORCE_DATA_SET, CLASS)
+    class_range = len(id3.get_att_values(data.data_set)[CLASS])
     print("data set: " + DIVORCE_DATA_SET)
     for i in range(NUM_RUNS):
-        ds.resplit_dataset(test_size=TEST_SIZE, prune_size=PRUNE_SIZE)
-        id3_tree = id3.build_id3(ds.train_set, ds.data_set)
+        data.resplit_dataset(test_size=TEST_SIZE, prune_size=PRUNE_SIZE)
+        id3_tree = id3.build_id3(data.train_set, data.data_set)
         # pprint(id3_tree)
-        c45_tree = id3.build_c45(ds.prune_set, ds.data_set, id3_tree, ds.train_set)
-        print(f"run {i}")
+        c45_tree = id3.build_c45(data.prune_set, data.data_set, id3_tree, data.train_set)
+        print(f"\nrun {i}")
         print("ID3")
-        test(ds.test_set, id3_tree)
+        test(data.test_set, id3_tree)
         print("C45")
-        test(ds.test_set, c45_tree)
+        test(data.test_set, c45_tree)

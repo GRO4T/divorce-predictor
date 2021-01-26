@@ -1,27 +1,17 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-data_set = []
-train_set = []
-prune_set = []
-test_set = []
 
+class DataSet:
+    def __init__(self, path, class_name, test_size=0.2, prune_size=0.2):
+        self.data_set = pd.read_csv(path, sep=";")
+        self.train_set = []
+        self.prune_set = []
+        self.test_set = []
+        df1 = self.data_set.pop(class_name)
+        self.data_set[class_name] = df1
+        self.resplit_dataset(test_size, prune_size)
 
-def load_dataset(*, path, test_size=0.2, prune_size=0.2, class_name="Class"):
-    global data_set
-    global train_set
-    global prune_set
-    global test_set
-    data_set = pd.read_csv(path, sep=";")
-    df1 = data_set.pop(class_name)
-    data_set[class_name] = df1
-    temp_set, test_set = train_test_split(data_set, test_size=test_size)
-    train_set, prune_set = train_test_split(temp_set, test_size=prune_size)
-
-
-def resplit_dataset(*, test_size=0.2, prune_size=0.2):
-    global train_set
-    global prune_set
-    global test_set
-    temp_set, test_set = train_test_split(data_set, test_size=test_size)
-    train_set, prune_set = train_test_split(temp_set, test_size=prune_size)
+    def resplit_dataset(self, test_size, prune_size):
+        temp_set, self.test_set = train_test_split(self.data_set, test_size=test_size)
+        self.train_set, self.prune_set = train_test_split(temp_set, test_size=prune_size)
