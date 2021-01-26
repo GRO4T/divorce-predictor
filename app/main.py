@@ -1,7 +1,6 @@
 import id3 as id3
 from data_set import DataSet
 from pprint import pprint
-import pdb
 
 NUM_RUNS = 4
 DIVORCE_DATA_SET = "data/students/student-mat.csv"
@@ -29,7 +28,7 @@ if __name__ == "__main__":
         data.resplit_dataset(test_size=TEST_SIZE, prune_size=PRUNE_SIZE)
         id3_tree = id3.build_id3(data.train_set, data.data_set)
         # pprint(id3_tree)
-        c45_tree = id3.build_c45(data.prune_set, data.data_set, id3_tree, data.train_set)
+        c45_tree = id3.build_c45(data.prune_set, data.data_set, id3_tree)
         print(f"\nrun {i}")
         print("ID3")
         test(data.test_set, id3_tree)

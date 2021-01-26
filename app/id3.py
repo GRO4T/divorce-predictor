@@ -1,8 +1,5 @@
-import pandas as pd
 import numpy as np
 from numpy import log2 as log
-import pdb
-from pprint import pprint
 import copy
 
 eps = np.finfo(float).eps
@@ -66,8 +63,7 @@ def __build_id3(df, att_values, tree=None):
     node = find_winner(df)
     # Create an empty dictionary to create tree
     if tree is None:
-        tree = {}
-        tree[node] = {}
+        tree = {node: {}}
 
     # We make loop to construct a tree by calling this function recursively.
     # In this we check if the subset is pure and stops if it is pure.
@@ -91,11 +87,10 @@ def __build_id3(df, att_values, tree=None):
     return tree
 
 
-def build_c45(prune_set, original_data_set, id3_tree, xd):
-    # pruned_tree = copy.deepcopy(id3_tree())
-    pruned_tree = build_id3(xd, original_data_set)
+def build_c45(prune_set, original_data_set, id3_tree):
+    id3_copy = copy.deepcopy(id3_tree)
     att_values = get_att_values(original_data_set)
-    return __build_c45(prune_set, prune_set, pruned_tree, att_values)
+    return __build_c45(prune_set, prune_set, id3_copy, att_values)
 
 
 def __build_c45(df, sub_df, tree, att_values):
@@ -141,7 +136,6 @@ def get_class(tree, row):
     if (type(tree)) is not dict:
         return tree
     attr = list(tree.keys())[0]
-    subtree = None
     try:
         subtree = tree[attr][row[attr]]
     except IndexError:
