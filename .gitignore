@@ -133,3 +133,7 @@ dmypy.json
 benchmarks/*
 !benchmarks/.gitkeep
 !benchmarks/gen_plots.py
+
+!benchmarks/plots/
+benchmarks/plots/*
+!benchmarks/plots/.gitkeep
