@@ -1,3 +1,7 @@
+"""
+Author: Rafał Kulus
+"""
+
 import subprocess
 import threading
 from time import sleep

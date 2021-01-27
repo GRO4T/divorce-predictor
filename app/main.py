@@ -1,3 +1,7 @@
+"""
+Author: Damian Kolaska, Rafał Kulus
+"""
+
 import sys
 import id3 as id3
 from data_set import DataSet

@@ -1,3 +1,7 @@
+"""
+Author: Damian Kolaska
+"""
+
 import numpy as np
 from numpy import log2 as log
 import copy
