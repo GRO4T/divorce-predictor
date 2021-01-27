@@ -32,7 +32,7 @@ if __name__ == "__main__":
     runs = int(sys.argv[5])
 
     data = DataSet(data_path, class_name)
-    class_range = len(id3.get_att_values(data.data_set)[class_name])
+    class_range = len(id3.get_attr_values(data.data_set)[class_name])
     results_path = f'./benchmarks/t{sys.argv[3]}_p{sys.argv[4]}.csv'
 
     print("\ndata set: " + data_path)
