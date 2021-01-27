@@ -130,5 +130,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-benchmarks
+benchmarks/*
 !benchmarks/.gitkeep
+!benchmarks/gen_plots.py
