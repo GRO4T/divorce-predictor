@@ -11,7 +11,8 @@ RUNS = 256
 # CLASS = "Dalc"
 DATA_SET = "./data/divorce.csv"
 CLASS = "Class"
-VENV = "./venv/Scripts/python.exe"
+# VENV = "./venv/Scripts/python.exe" # Windows
+VENV = "./venv/bin/python3" # Linux
 CONCURRENT_JOBS = 6
 UPPER = 6
 
@@ -23,7 +24,7 @@ jobs = []
 
 def run_process(job):
     global running
-    proc = subprocess.Popen(job)
+    proc = subprocess.Popen(job, shell=True)
     proc.wait()
     running -= 1
 
